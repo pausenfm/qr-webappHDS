@@ -1,0 +1,15 @@
+Lokal öffnet sich korrekte page.
+nicht lokal aber noch nicht aktualisiert auf aktuelle page
+
+lokal kann man eine (!) nachricht senden, danach schließt sich aber websocket verbindung
+
+auf lokaler page, rechts klick untersuchen : Response was blocked by CORB (Cross-Origin Read Blocking)
+
+next steps: - nicht lokal aktualisiert läuft
+- websocket soll sich nicht schießen
+- daten sollen in max ankommen
+
+
+https://pausenfm.github.io/qr-webappHDS/
+
+lokal über index.html rechtsklick

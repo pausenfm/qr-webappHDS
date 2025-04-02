@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR-WebApp</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Hinzufügen der OSC.js-Bibliothek -->
+    <script src="https://cdn.jsdelivr.net/npm/osc-js@2.1.0/dist/osc.min.js"></script>
 </head>
 <body>
     <h1>Willkommen in meiner Web-App!</h1>
-    <button onclick="alert('Hallo!')">Klick mich</button>
+    <button onclick="sendOSCMessage()">Sende 'Hallo Welt' über OSC</button>
+
     <script src="script.js"></script>
 </body>
 </html>
+
