@@ -3,7 +3,7 @@ console.log("Web-App geladen!");
 // Funktion zum Senden der OSC-Nachricht über WebSocket
 function sendOSCMessage() {
   // WebSocket-Verbindung zum Server herstellen
-  const socket = new WebSocket("ws://127.0.0.1:8080");
+  const socket = new WebSocket("ws://192.168.1.6:8080");
 
   // Wenn die Verbindung geöffnet wird, sende eine Nachricht
   socket.onopen = () => {
