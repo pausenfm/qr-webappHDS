@@ -1,30 +1,22 @@
-console.log("Web-App geladen!");
+console.log("📱 Web-App geladen!");
 
-// Funktion zum Senden der OSC-Nachricht über WebSocket
+// 🌍 Verbindung zum WebSocket-Server
+const socket = new WebSocket("wss://e35f-2a02-3100-2eb9-8600-29e6-b95b-10f1-6f30.ngrok-free.app");
+
+// ✅ WebSocket-Verbindung erfolgreich
+socket.onopen = () => console.log("✅ WebSocket verbunden!");
+
+// ❌ Fehlerbehandlung
+socket.onerror = (error) => console.error("❌ WebSocket-Fehler:", error);
+socket.onclose = () => console.log("❌ Verbindung getrennt!");
+
+// 📤 Nachricht senden, wenn Button geklickt wird
 function sendOSCMessage() {
-  // WebSocket-Verbindung zum Server herstellen (ngrok-URL verwenden)
-  const socket = new WebSocket("wss://dd80-2-242-205-117.ngrok-free.app");
-
-
-  // Wenn die Verbindung geöffnet wird, sende eine Nachricht
-  socket.onopen = () => {
-    console.log("WebSocket-Verbindung hergestellt!");
-
-    // OSC-Nachricht (z.B. "/hello" mit der Nachricht "Hallo Welt")
+  if (socket.readyState === WebSocket.OPEN) {
     const message = "Hallo Welt";
     socket.send(message);
-    console.log("Nachricht gesendet:", message);
-  };
-
-  // Wenn ein Fehler auftritt
-  socket.onerror = (error) => {
-    console.log("WebSocket-Fehler:", error);
-  };
-
-  // Wenn die Verbindung geschlossen wird
-  socket.onclose = () => {
-    console.log("WebSocket-Verbindung geschlossen");
-  };
+    console.log("📨 Nachricht gesendet:", message);
+  } else {
+    console.error("❌ WebSocket nicht verbunden!");
+  }
 }
-
-
