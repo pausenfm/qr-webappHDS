@@ -1,22 +1,42 @@
 console.log("📱 Web-App geladen!");
 
-// 🌍 Verbindung zum WebSocket-Server
-const socket = new WebSocket("wss://e35f-2a02-3100-2eb9-8600-29e6-b95b-10f1-6f30.ngrok-free.app");
+let socket; // WebSocket-Verbindung global halten
 
-// ✅ WebSocket-Verbindung erfolgreich
-socket.onopen = () => console.log("✅ WebSocket verbunden!");
+function connectWebSocket() {
+  // Falls bereits verbunden, nicht erneut verbinden
+  if (socket && socket.readyState === WebSocket.OPEN) return;
 
-// ❌ Fehlerbehandlung
-socket.onerror = (error) => console.error("❌ WebSocket-Fehler:", error);
-socket.onclose = () => console.log("❌ Verbindung getrennt!");
+  console.log("🔄 Verbinde WebSocket...");
+  socket = new WebSocket("wss://deine-ngrok-url.ngrok-free.app");
 
-// 📤 Nachricht senden, wenn Button geklickt wird
-function sendOSCMessage() {
-  if (socket.readyState === WebSocket.OPEN) {
-    const message = "Hallo Welt";
-    socket.send(message);
-    console.log("📨 Nachricht gesendet:", message);
-  } else {
-    console.error("❌ WebSocket nicht verbunden!");
-  }
+  socket.onopen = () => {
+    console.log("✅ WebSocket verbunden!");
+  };
+
+  socket.onmessage = (event) => {
+    console.log("📥 Antwort vom Server:", event.data);
+  };
+
+  socket.onerror = (error) => {
+    console.log("❌ WebSocket-Fehler:", error);
+  };
+
+  socket.onclose = () => {
+    console.log("❌ WebSocket getrennt! Versuche, erneut zu verbinden...");
+    setTimeout(connectWebSocket, 3000); // Automatisch neu verbinden nach 3 Sekunden
+  };
 }
+
+function sendOSCMessage() {
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    console.log("❌ WebSocket nicht verbunden!");
+    return;
+  }
+
+  const message = "Hallo Welt";
+  socket.send(message);
+  console.log("📨 Nachricht gesendet:", message);
+}
+
+// WebSocket beim Laden der Seite verbinden
+connectWebSocket();
