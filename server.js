@@ -1,59 +1,42 @@
 const WebSocket = require('ws');
 const osc = require('osc');
 const dgram = require('dgram');
-const fs = require('fs');
-const https = require('https');
+const http = require('http');
 
-// Pfade zu den SSL-Zertifikaten (dieses Beispiel geht von selbstsignierten Zertifikaten aus)
-const serverOptions = {
-  key: fs.readFileSync('path/to/key.pem'),    // Dein SSL-Schlüssel
-  cert: fs.readFileSync('path/to/cert.pem')   // Dein SSL-Zertifikat
-};
-
-// HTTPS-Server erstellen
-const server = https.createServer(serverOptions);
-
-// WebSocket-Server erstellen (mit HTTPS als Basis)
+// HTTP-Server erstellen
+const server = http.createServer();
 const wss = new WebSocket.Server({ server });
 
-// OSC-UDP-Client erstellen (Max/MSP IP und Port)
+// OSC-UDP-Client für Max/MSP
 const udpClient = dgram.createSocket('udp4');
-const MAX_MSP_IP = '192.168.1.6';  // Ändere dies auf die IP-Adresse deines Max/MSP-Rechners
-const MAX_MSP_PORT = 8080;         // Standardport für Max/MSP OSC (kann je nach deiner Max/MSP-Konfiguration unterschiedlich sein)
+const MAX_MSP_IP = '192.168.1.6';
+const MAX_MSP_PORT = 8080;
 
-// Wenn eine WebSocket-Verbindung hergestellt wird
+// WebSocket-Verbindungen verwalten
 wss.on('connection', ws => {
-  console.log('WebSocket verbunden');
+  console.log('✅ WebSocket verbunden!');
 
   ws.on('message', message => {
-    console.log('Nachricht von Web-App erhalten:', message);
+    console.log('📨 Nachricht erhalten:', message);
 
     // OSC-Nachricht erstellen
     const oscMessage = new osc.Message('/hello', message);
-
-    // Die OSC-Nachricht über UDP an Max/MSP senden
     const oscPacket = oscMessage.toBuffer();
+
+    // Nachricht an Max/MSP senden
     udpClient.send(oscPacket, 0, oscPacket.length, MAX_MSP_PORT, MAX_MSP_IP, (err) => {
-      if (err) {
-        console.log('Fehler beim Senden der OSC-Nachricht:', err);
-      } else {
-        console.log('OSC-Nachricht erfolgreich an Max/MSP gesendet');
-      }
+      if (err) console.error('❌ Fehler beim Senden:', err);
+      else console.log('✅ OSC gesendet an Max/MSP:', message);
     });
   });
 
-  ws.on('error', (error) => {
-    console.error('WebSocket Fehler:', error);
-  });
+  ws.on('error', err => console.error('❌ WebSocket Fehler:', err));
+  ws.on('close', () => console.log('❌ WebSocket getrennt!'));
 
-  ws.on('close', () => {
-    console.log('Ein Client hat die Verbindung geschlossen');
-  });
-
-  ws.send("Verbindung erfolgreich!");
+  ws.send("👋 Verbindung erfolgreich!");
 });
 
-// HTTPS-Server auf Port 8080 starten
+// HTTP-Server auf Port 8080 starten
 server.listen(8080, () => {
-  console.log('HTTPS-WebSocket-Server läuft auf wss://127.0.0.1:8080');
+  console.log('🚀 WebSocket-Server läuft auf ws://localhost:8080 (Nutze Ngrok für externen Zugriff!)');
 });
