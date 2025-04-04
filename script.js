@@ -1,42 +1,30 @@
-console.log("📱 Web-App geladen!");
-
-let socket; // WebSocket-Verbindung global halten
+let socket;  // Globale Variable für WebSocket
 
 function connectWebSocket() {
-  // Falls bereits verbunden, nicht erneut verbinden
-  if (socket && socket.readyState === WebSocket.OPEN) return;
-
   console.log("🔄 Verbinde WebSocket...");
-  socket = new WebSocket("wss://d908-2a02-3100-2eb9-8600-29e6-b95b-10f1-6f30.ngrok-free.app");
+  socket = new WebSocket("wss://75d7-2a02-3100-2eb9-8600-29e6-b95b-10f1-6f30.ngrok-free.app");
 
-  socket.onopen = () => {
-    console.log("✅ WebSocket verbunden!");
-  };
+  socket.onopen = () => console.log("✅ WebSocket verbunden!");
 
-  socket.onmessage = (event) => {
-    console.log("📥 Antwort vom Server:", event.data);
-  };
+  socket.onmessage = (event) => console.log("📩 Nachricht vom Server:", event.data);
 
-  socket.onerror = (error) => {
-    console.log("❌ WebSocket-Fehler:", error);
-  };
+  socket.onerror = (error) => console.log("❌ WebSocket-Fehler:", error);
 
   socket.onclose = () => {
     console.log("❌ WebSocket getrennt! Versuche, erneut zu verbinden...");
-    setTimeout(connectWebSocket, 3000); // Automatisch neu verbinden nach 3 Sekunden
+    setTimeout(connectWebSocket, 3000); // Versuche nach 3s erneut zu verbinden
   };
 }
 
-function sendOSCMessage() {
-  if (!socket || socket.readyState !== WebSocket.OPEN) {
-    console.log("❌ WebSocket nicht verbunden!");
-    return;
-  }
-
-  const message = "Hallo Welt";
-  socket.send(message);
-  console.log("📨 Nachricht gesendet:", message);
-}
-
-// WebSocket beim Laden der Seite verbinden
+// WebSocket beim Laden der Seite starten
 connectWebSocket();
+
+function sendOSCMessage() {
+  if (socket.readyState === WebSocket.OPEN) {
+    const message = "Hallo Welt";
+    socket.send(message);
+    console.log("📨 Nachricht gesendet:", message);
+  } else {
+    console.log("❌ WebSocket nicht verbunden!");
+  }
+}
