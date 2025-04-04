@@ -1,7 +1,7 @@
 console.log("📱 Web-App geladen!");
 
 // 🌍 Verbindung zum WebSocket-Server
-const socket = new WebSocket("wss://7a72-2a02-3100-2eb9-8600-29e6-b95b-10f1-6f30.ngrok-free.app");
+const socket = new WebSocket("wss://cbf6-2a02-3100-2eb9-8600-29e6-b95b-10f1-6f30.ngrok-free.app");
 
 // ✅ WebSocket-Verbindung erfolgreich
 socket.onopen = () => console.log("✅ WebSocket verbunden!");
