@@ -10,13 +10,13 @@ const wss = new WebSocket.Server({ server });
 // OSC-UDP-Client für Max/MSP
 const udpClient = dgram.createSocket('udp4');
 const MAX_MSP_IP = '192.168.1.6';
-const MAX_MSP_PORT = 8080;
+const MAX_MSP_PORT = 8020;
 
 // WebSocket-Verbindungen verwalten
-wss.on('connection', (ws) => {
+wss.on('connection', (ws) => {  // Korrekte Syntax mit Klammern und Komma
   console.log('✅ WebSocket verbunden!');
 
-  ws.on('message', (message) => {
+  ws.on('message', (message) => {  // Korrekte Syntax mit Klammern und Komma
     console.log('📨 Nachricht erhalten:', message);
 
     // OSC-Nachricht erstellen
@@ -28,15 +28,12 @@ wss.on('connection', (ws) => {
       if (err) console.error('❌ Fehler beim Senden:', err);
       else console.log('✅ OSC gesendet an Max/MSP:', message);
     });
-
-    // An Client zurücksenden (optional)
-    ws.send("✅ Nachricht empfangen: " + message);
   });
 
   ws.on('error', (err) => console.error('❌ WebSocket Fehler:', err));
   ws.on('close', () => console.log('❌ WebSocket getrennt!'));
 
-  ws.send("👋 Verbindung erfolgreich!");
+  ws.send('👋 Verbindung erfolgreich!');
 });
 
 // HTTP-Server auf Port 8080 starten
