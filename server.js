@@ -13,10 +13,10 @@ const MAX_MSP_IP = '192.168.1.6';
 const MAX_MSP_PORT = 8020;
 
 // WebSocket-Verbindungen verwalten
-wss.on('connection', (ws) => {  // Korrekte Syntax mit Klammern und Komma
+wss.on('connection', ws => {
   console.log('✅ WebSocket verbunden!');
 
-  ws.on('message', (message) => {  // Korrekte Syntax mit Klammern und Komma
+  ws.on('message', message => {
     console.log('📨 Nachricht erhalten:', message);
 
     // OSC-Nachricht erstellen
@@ -30,13 +30,14 @@ wss.on('connection', (ws) => {  // Korrekte Syntax mit Klammern und Komma
     });
   });
 
-  ws.on('error', (err) => console.error('❌ WebSocket Fehler:', err));
+  ws.on('error', err => console.error('❌ WebSocket Fehler:', err));
   ws.on('close', () => console.log('❌ WebSocket getrennt!'));
 
-  ws.send('👋 Verbindung erfolgreich!');
+  ws.send("👋 Verbindung erfolgreich!");
 });
 
 // HTTP-Server auf Port 8080 starten
-server.listen(8081, () => {
+server.listen(8080, () => {
   console.log('🚀 WebSocket-Server läuft auf ws://localhost:8080 (Nutze Ngrok für externen Zugriff!)');
 });
+
