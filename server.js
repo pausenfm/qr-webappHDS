@@ -10,6 +10,20 @@ const serverOptions = {
   cert: fs.readFileSync('/Users/paulschulze/Documents/WEBAPPZertifikate/certificate.crt') // Dein selbstsigniertes Zertifikat
 };
 
+// Falls der Schlüssel passwortgeschützt ist:
+const passphrase = 'qrwebappHDS'; // Deine Passphrase hier
+
+const options = {
+  key: privateKey,
+  cert: certificate,
+  passphrase: passphrase // Falls Passphrase erforderlich ist
+};
+
+https.createServer(options, (req, res) => {
+  res.writeHead(200);
+  res.end('Hello, HTTPS!');
+}).listen(8080);
+
 // HTTPS-Server erstellen
 const server = https.createServer(serverOptions);
 const wss = new WebSocket.Server({ server });
