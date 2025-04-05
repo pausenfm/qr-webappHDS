@@ -11,13 +11,15 @@ const serverOptions = {
   passphrase: 'qrwebappHDS'  // Falls der private Schlüssel passwortgeschützt ist, füge hier die Passphrase hinzu
 };
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 // HTTPS-Server erstellen
 const server = https.createServer(serverOptions);
 const wss = new WebSocket.Server({ server });
 
 // OSC-UDP-Client für Max/MSP
 const udpClient = dgram.createSocket('udp4');
-const MAX_MSP_IP = '127.0.0.1';
+const MAX_MSP_IP = '192.168.1.15';
 const MAX_MSP_PORT = 8020;
 
 // WebSocket-Verbindungen verwalten
