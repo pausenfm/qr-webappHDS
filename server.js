@@ -7,22 +7,9 @@ const dgram = require('dgram');
 // SSL-Zertifikat laden
 const serverOptions = {
   key: fs.readFileSync('/Users/paulschulze/Documents/WEBAPPZertifikate/private.key'),   // Dein privater Schlüssel
-  cert: fs.readFileSync('/Users/paulschulze/Documents/WEBAPPZertifikate/certificate.crt') // Dein selbstsigniertes Zertifikat
+  cert: fs.readFileSync('/Users/paulschulze/Documents/WEBAPPZertifikate/certificate.crt'), // Dein selbstsigniertes Zertifikat
+  passphrase: 'qrwebappHDS'  // Falls der private Schlüssel passwortgeschützt ist, füge hier die Passphrase hinzu
 };
-
-// Falls der Schlüssel passwortgeschützt ist:
-const passphrase = 'qrwebappHDS'; // Deine Passphrase hier
-
-const options = {
-  key: privateKey,
-  cert: certificate,
-  passphrase: passphrase // Falls Passphrase erforderlich ist
-};
-
-https.createServer(options, (req, res) => {
-  res.writeHead(200);
-  res.end('Hello, HTTPS!');
-}).listen(8080);
 
 // HTTPS-Server erstellen
 const server = https.createServer(serverOptions);
@@ -61,3 +48,26 @@ wss.on('connection', ws => {
 server.listen(8080, '0.0.0.0', () => {
   console.log('🚀 WebSocket-Server läuft auf wss://localhost:8080');
 });
+
+console.log("📱 Web-App geladen!");
+
+// 🌍 Verbindung zum WebSocket-Server über HTTPS
+const socket = new WebSocket("wss://localhost:8080");
+
+// ✅ WebSocket-Verbindung erfolgreich
+socket.onopen = () => console.log("✅ WebSocket verbunden!");
+
+// ❌ Fehlerbehandlung
+socket.onerror = (error) => console.error("❌ WebSocket-Fehler:", error);
+socket.onclose = () => console.log("❌ Verbindung getrennt!");
+
+// 📤 Nachricht senden, wenn Button geklickt wird
+function sendOSCMessage() {
+  if (socket.readyState === WebSocket.OPEN) {
+    const message = "Hallo Welt";
+    socket.send(message);
+    console.log("📨 Nachricht gesendet:", message);
+  } else {
+    console.error("❌ WebSocket nicht verbunden!");
+  }
+}
