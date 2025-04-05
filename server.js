@@ -1,10 +1,17 @@
+const fs = require('fs');
+const https = require('https');
 const WebSocket = require('ws');
 const osc = require('osc');
 const dgram = require('dgram');
-const http = require('http');
 
-// HTTP-Server erstellen
-const server = http.createServer();
+// SSL-Zertifikat laden
+const serverOptions = {
+  key: fs.readFileSync('/Users/paulschulze/Documents/WEBAPPZertifikate/private.key'),   // Dein privater Schlüssel
+  cert: fs.readFileSync('/Users/paulschulze/Documents/WEBAPPZertifikate/certificate.crt') // Dein selbstsigniertes Zertifikat
+};
+
+// HTTPS-Server erstellen
+const server = https.createServer(serverOptions);
 const wss = new WebSocket.Server({ server });
 
 // OSC-UDP-Client für Max/MSP
@@ -36,8 +43,7 @@ wss.on('connection', ws => {
   ws.send("👋 Verbindung erfolgreich!");
 });
 
-// HTTP-Server auf Port 8080 starten
+// HTTPS-Server auf Port 8080 starten
 server.listen(8080, '0.0.0.0', () => {
-  console.log('🚀 WebSocket-Server läuft auf ws://localhost:8080 (Nutze Ngrok für externen Zugriff!)');
+  console.log('🚀 WebSocket-Server läuft auf wss://localhost:8080');
 });
-
