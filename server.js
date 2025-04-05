@@ -47,7 +47,7 @@ wss.on('connection', ws => {
 });
 
 // HTTPS-Server auf Port 8080 starten
-server.listen(8080, '0.0.0.0', () => {
+server.listen(8080, () => {
   console.log('🚀 WebSocket-Server läuft auf wss://localhost:8080');
 });
 
