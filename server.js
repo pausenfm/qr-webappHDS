@@ -37,7 +37,7 @@ wss.on('connection', ws => {
 });
 
 // HTTP-Server auf Port 8080 starten
-server.listen(8080, () => {
+server.listen(8080, '0.0.0.0', () => {
   console.log('🚀 WebSocket-Server läuft auf ws://localhost:8080 (Nutze Ngrok für externen Zugriff!)');
 });
 
