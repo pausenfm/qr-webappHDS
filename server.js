@@ -20,7 +20,7 @@ const wss = new WebSocket.Server({ server });
 // OSC-UDP-Client für Max/MSP
 const udpClient = dgram.createSocket('udp4');
 const MAX_MSP_IP = '192.168.1.15';
-const MAX_MSP_PORT = 8020;
+const MAX_MSP_PORT = 8020; 
 
 // WebSocket-Verbindungen verwalten
 wss.on('connection', ws => {
